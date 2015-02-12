@@ -1,0 +1,54 @@
+<link rel="import" href="../../core-animated-pages/core-animated-pages.html">
+<polymer-element name="view-container">
+<template>
+  <style type="text/css">
+  #trackImg {
+    width:250px;
+    height:250px;
+    margin:10px 0;
+  }
+  #goBack {
+    margin:10px 0;
+  }
+  #trackImg img {
+    width:100%;
+    height:100%;
+  }
+  #page2 {
+    text-align:center;
+  }
+  </style>
+  <core-animated-pages id="coreAnimatedPages" transitions="cross-fade" on-play-track="{{fade}}">
+  <section id="page1">
+    <search-field cross-fade></search-field>
+  </section>
+  <section id="page2">
+    <player-container cross-fade><paper-button id="trackImg" raised on-click="{{playTrack}}"><img src="{{trackImg}}" /></paper-button><div id="embed_player"></div></player-container>
+    <paper-button cross-fade raised id="goBack" on-click="{{goBack}}">Go Back</paper-button>
+  </section>
+</core-animated-pages>
+</template>
+<script>
+Polymer({
+  ready:function(){
+    this.current = this.$.coreAnimatedPages;
+    this.trackImg = '';
+    this.trackUri = '';
+    this.el = '';
+  },
+  fade:function(e){
+    this.current.selected = 1;
+    this.trackImg = e.detail.img;
+    this.trackUri = e.detail.uri;
+    this.el = e.detail.el.querySelector('#embed_player');
+  },
+  goBack:function(){
+    this.el.innerHTML = "";
+    this.current.selected = 0;
+  },
+  playTrack: function(){
+    SC.oEmbed(this.trackUri, { auto_play: true }, this.el);
+  }
+});
+</script>
+</polymer-element>

@@ -1,0 +1,27 @@
+<link rel="import" href="searchfield.html">
+<polymer-element name="soundcloud-service" attributes="search">
+<template>
+	<style>
+		div {
+			width:250px;
+			height:250px;
+			position:absolute;
+			display:block;
+		}
+	</style>
+	<!-- <div>{{search}}</div> -->
+	<!-- <search-field listedTracks>{{listedTracks}}</search-field> -->
+	<!-- <search-field searchTerm="{{searchTerm}}"></search-field> -->
+</template>
+<script>
+Polymer({
+	scSearch:function(){
+		SC.get('/tracks', { q: searchTerm }, function(tracks) {
+			$.each(tracks, function(i){
+				console.log(i);
+			});
+		});
+	}
+});
+</script>
+</polymer-element>

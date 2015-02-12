@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="http://code.jquery.com/jquery-latest.js"></script>
+  <script src="//connect.soundcloud.com/sdk.js"></script>
+  <script src="bower_components/webcomponentsjs/webcomponents.min.js"></script>
+  <link rel="import" href="bower_components/core-elements/core-elements.html">
+  <link rel="import" href="bower_components/core-animated-pages/core-animated-pages.html">
+  <link rel="import" href="bower_components/core-toolbar/core-toolbar.html">
+  <link rel="import" href="bower_components/core-header-panel/core-header-panel.html">
+  <link rel="import" href="bower_components/core-icons/core-icons.html">
+  <link rel="import" href="bower_components/paper-icon-button/paper-icon-button.html">
+  <link rel="import" href="bower_components/elements/search/searchfield.html">
+  <link rel="import" href="bower_components/elements/search/viewContainer.html">
+  <script>
+  SC.initialize({
+    client_id: "d652006c469530a4a7d6184b18e16c81"
+  });
+  </script>
+</head>
+<body fullbleed vertical layout unresolved>
+  <core-header-panel flex>
+  <core-toolbar id="mainheader">
+  <span flex>Soundcloud Search Engine</span>
+</core-toolbar>
+<view-container></view-container>
+</core-header-panel>
+</body>
+</html>

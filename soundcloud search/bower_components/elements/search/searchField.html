@@ -1,0 +1,106 @@
+<link rel="import" href="trackItem.html">
+<link href="../../paper-input/paper-input.html" rel="import">
+<link href="../../paper-button/paper-button.html" rel="import">
+<polymer-element name="search-field">
+<template>
+  <style type="text/css">
+  #searchContainer {
+    padding:0 10px;
+  }
+  .trackBtn {
+    display:block;
+    padding:0;
+    margin:10px 0;
+  }
+  #searchbutton {
+    top:45px;
+  }
+  .prevnext {
+    margin:10px;
+  }
+  #next {
+    float:right;
+  }
+  </style>
+  <div flex id="searchContainer">
+    <div>
+      <paper-input floatinglabel
+      label="Search Music"
+      type="search"
+      id="searchInput"
+      autocomplete="off"
+      value=""
+      pattern="^.+$"
+      error="Input required">
+    </paper-input>
+    <paper-icon-button id="searchbutton" 
+    icon="search" on-click="{{searchIt}}"></paper-icon-button>
+    <core-a11y-keys target="{{}}" keys="enter" on-keys-pressed="{{searchIt}}"></core-a11y-keys>
+  </div>
+  <div>{{message}}</div>
+  <template repeat="{{track in listedtracks}}">
+    <paper-button raised class="trackBtn">
+    <track-item 
+    uri="{{track.uri}}"
+    id="{{track.id}}"
+    on-click="{{playTrack}}">
+    <h3>{{track.title}}</h3>
+  </track-item>
+</paper-button>
+</template>
+</div>
+<paper-button raised id="prev" class="prevnext" on-click="{{prevPage}}">prev page</paper-button>
+<paper-button raised id="next" class="prevnext" on-click="{{nextPage}}">next page</paper-button>
+</template>
+<script>
+Polymer('search-field',{
+  ready:function(){
+   this.searchTerm ='';
+   this.listedtracks = [];
+   this.page_size = 6;
+   this.item = '/tracks';
+   this.currentPage = 0;
+ },
+ searchIt: function(){
+  searchTerm = this.$.searchInput.value;
+  if (searchTerm != "")
+  {
+    SC.get(this.item, { q: searchTerm, limit: this.page_size, offset: (this.currentPage * this.page_size)}, function(tracks) {
+      var outer = document.querySelector('view-container');
+      var inner = outer.shadowRoot.querySelector('search-field');
+      if (tracks.length > 0) {
+        inner.message = null;
+        inner.listedtracks = tracks;
+      }
+      else 
+      {
+        inner.message = 'no results';
+        inner.listedtracks = null;
+      }  
+    });
+  }
+  else
+  {
+    // alert("Please input search term");
+  }
+},
+prevPage: function(){
+  if ( (this.currentPage - 1) < 0) return;
+  this.currentPage--; 
+  this.searchIt();
+},
+nextPage: function(){
+  this.currentPage++; 
+  this.searchIt();
+},
+playTrack: function(event, detail, sender){
+  var trackImage = sender.templateInstance.model.track.artwork_url;
+  var trackUri = sender.templateInstance.model.track.uri;
+  var trackId = sender.templateInstance.model.track.id;
+  var outer = document.querySelector('view-container');
+  var inner = outer.shadowRoot.querySelector('player-container');
+  this.fire('play-track', {img: trackImage, uri: trackUri, id: trackId, el: inner});
+}
+});
+</script>
+</polymer-element>
